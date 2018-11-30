@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Geocoding Service</title>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <meta charset="utf-8" />
+        <style>
+            /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+            #mapDiv {
+                height: 600px;
+            }
+
+            #floating-panel {
+                position: absolute;
+                top: 10px;
+                left: 25%;
+                padding: 5px;
+                border: 1px solid #999;
+                text-align: center;
+                font-family: "Roboto", "sans-serif";
+                line-height: 30px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>My First Google Map</h1>
+        <div id="floating-panel">
+            <input id="address" type="textbox" value="Sydney, NSW" />
+            <input id="submit" type="button" value="Geocode" />
+        </div>
+        <div id="mapDiv"></div>
+        <script>
+            function initMap() {
+                var map = new google.maps.Map(document.getElementById("mapDiv"), {
+                    zoom: 13,
+                    center: {
+                        lat: 33.684566,
+                        lng: -117.826508
+                    }
+                });
+                var geocoder = new google.maps.Geocoder();
+
+                document.getElementById("submit").addEventListener("click", function() {
+                    geocodeAddress(geocoder, map);
+                });
+            }
+
+            function geocodeAddress(geocoder, resultsMap) {
+                var inputAddress = document.getElementById("address").value;
+                geocoder.geocode(
+                    {
+                        address: inputAddress
+                    },
+                    function(results, status) {
+                        if (status === "OK") {
+                            // .geometry.location property contains a LatLng object, refering the place
+                            // we searched for. Retrieve it and assign it to the map's center
+                            resultsMap.setCenter(results[0].geometry.location);
+                            var marker = new google.maps.Marker({
+                                map: resultsMap,
+                                position: results[0].geometry.location
+                            });
+                        } else {
+                            alert(
+                                "Geocode was not successful for the following reason: " +
+                                    status
+                            );
+                        }
+                    }
+                );
+            }
+        </script>
+        <!-- -------------- GOOGLE MAP API -------------- -->
+        <script
+            async
+            defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxxASExfHJ3E3zseHXZoiRc53dIAcJjYI&callback=initMap"
+            type="text/javascript"
+        ></script>
+    </body>
+</html>

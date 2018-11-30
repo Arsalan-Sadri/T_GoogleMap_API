@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   
+    <style>
+        #mapDiv {
+            /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+            height: 600px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>My First Google Map</h1>
+    <div id="mapDiv"></div>
+    <script>
+        function initMap() {
+            // Creating a map
+            var mapDiv = document.getElementById("mapDiv");
+            var mapCenter = new google.maps.LatLng(51.508742, -0.120850);
+            var mapOpts = {
+                center: mapCenter,
+                zoom: 13
+            };
+            var map = new google.maps.Map(mapDiv, mapOpts);
+
+            // Capturing click event on map 
+            map.addListener("click", function (event) { // Alt: google.maps.event.addListener(map, "click", function (event) {
+                // Creating a marker
+                placeMarker(event);
+            });
+
+            // Function to drop a marker on the map where it is clicked 
+            function placeMarker(e) {
+                var markerOpts = {
+                    map: map,
+                    position: e.latLng,
+                    animation: google.maps.Animation.DROP
+                };
+                var marker = new google.maps.Marker(markerOpts);
+                var infowindow = new google.maps.InfoWindow({
+                    content: 'Latitude: ' + e.latLng.lat() + '<br>Longitude: ' + e.latLng.lng()
+                });
+                infowindow.open(map, marker);
+
+            }
+        }
+    </script>
+    <!---------------- GOOGLE MAP API ---------------->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxxASExfHJ3E3zseHXZoiRc53dIAcJjYI&callback=initMap"
+        type="text/javascript"></script>
+
+</body>
+
+</html>
